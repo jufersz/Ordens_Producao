@@ -52,3 +52,24 @@ if __name__=='__main__':
 
     app.run(debug=True, host='0.0.0.0', port=5000)
     
+    # --- ROTA POR ID - BUSCAR UMA ORDEM ESPECÍFICA PELO Id(GER) ---
+    
+    @app.route('/ordens/<int:ordem_id>', methods=['GET'])
+    
+    def buscar_ordem(ordem_id):
+        '''
+        | Buscar uma única ordem de produção pelo ID.
+        | Parametros da URL:
+            - ordem id(init): ID da ordem a ser buscada.
+            
+        | Retornar: 
+            200 + JSON da ordem, se for encontrada.
+            404 + mensagem de erro, se não existir. 
+        '''
+        conn = get_connection()
+        cursor = conn.cursor()
+        
+        # O '?' é substituido pelo valor de ordem_id de forma segura 
+        cursor.execute('SELECT * FROM ordens WHERE id = ?', (ordem_id))
+        ordem = cursor.fetchone() # Ele retorna um único registro ou None
+        conn.close()
