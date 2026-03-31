@@ -51,14 +51,13 @@ def listar_ordens():
 
 def buscar_ordem(ordem_id):
     """
-    Buscar uma única ordem de produção pelo ID.
-    
-    Parametros de URL:
+    |Buscar uma única ordem de produção pelo ID.
+    |Parametros de URL:
         - Ordem id(int): ID da ordem a ser buscada
     
-    Retornar:
+    |Retornar:
         200 + JSON da ordem, se for encontrada.
-        404 + mensagem de erro, se não existir
+        404 + mensagem de erro, se não existir.
     """
     
     conn = get_connection()
@@ -74,6 +73,52 @@ def buscar_ordem(ordem_id):
         return jsonify({'erro': f'Ordem {ordem_id} nao encontrada'}), 404
     return jsonify(dict(ordem)), 200
 
+# ROTA: Criar nova ordem de produção (POST) 
+@app.route('/ordens', methods=['POST'])
+def criar_ordem():
+    """
+    |Cria uma nova ordem de produção a partir dos dados JSON enviados.
+    
+    |Body esperado(JSON):
+    
+        produto     (str): Nome do produto      - Obrigatório
+        quantidade  (int): Quantidade de peças  - Obrigatório, > 0
+        status      (str): Opcional             - Padrão: 'Pendente'
+        
+    |Retorno:
+        201 : JSON da ordem criada, em caso de sucesso.
+        400 : mensagem de erro, se dados inválidos
+    """
+    
+    dados = request.get_json()
+    
+    if not dados:
+        return jsonify({'erro': 'Body da requisicao ausente ou invalido'}), 400
+    
+    # Verificação de campo obrigatório (produto)
+    produto = dados.get('produto', '').strip()
+    if not produto:
+        return jsonify({'erro': 'Campo "Produto" e obrigatorio e nao pode ser vazio'}), 400
+    
+    # Verificação de campo obrigatório (produto)
+    quantidade = dados.get('quantidade')
+    if quantidade is None:
+        return jsonify({'erro': 'Campo "Quantidade" e obrigatorio.'}), 400
+    
+    # Verifica se a quantidade é um número inteiro e positivo
+    try:
+        quantidade = int(quantidade)
+        if quantidade <= 0:
+            raise ValueError()
+    except (ValueError, TypeError):
+        return jsonify({'erro': 'Campo "Quantidade" deve ser um numero inteiro positivo'}), 400
+    
+    # Status (pendente, em andamento, concluído) - Opcional
+    status_validos = ['Pendente', 'Em andamento', 'Concluida'] # Criar lista/Vetor
+    status = dados.get('status', 'Pendente')
+    if status not in status_validos:
+        return jsonify({'erro': f'Status invalido. Use {status_validos}'}), 400
+        
 # --- PONTO DE PARTIDA ---
 
 if __name__=='__main__':
