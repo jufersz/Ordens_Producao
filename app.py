@@ -118,7 +118,30 @@ def criar_ordem():
     status = dados.get('status', 'Pendente')
     if status not in status_validos:
         return jsonify({'erro': f'Status invalido. Use {status_validos}'}), 400
-        
+    
+    # Inserção dos dados no banco - toda vez que for fazer algo relacionado a banco, utiliza-se:
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute( # SQL
+        'INSERT INTO ordens (produto, quantidade, status ) VALUES (?, ?, ?)',
+        (produto, quantidade, status)
+    )
+    conn.commit()
+    
+    # Recuperando ID que é gerado automaticamente pelo banco
+    novo_id = cursor.lastrowid
+    conn.close() # Sempre utilizar o 'conn.close()'
+    
+    # Buscar o registro que foi recem-criado
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute( # SQL
+        'SELECT * FROM ordens WHERE id = ? ', (novo_id,))
+    nova_ordem = cursor.fetchone() # 'fetchone' - Serve para limpar a string
+    conn.close()
+    
+    # 201 - Retornar "created" com registro completo
+    return jsonify(dict(nova_ordem)), 201
 # --- PONTO DE PARTIDA ---
 
 if __name__=='__main__':
