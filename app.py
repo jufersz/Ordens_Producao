@@ -1,8 +1,14 @@
-#--- BACK-END FLASK: ROTAS DA API REST ---
+#---------------------------------------------------------------------------------
+# app.py - SISTEMA DE ORDENS DE PRODUÇÃO - C.R.U.D COMPLETO                      |
+# SENAI - JARAGUÁ DO SUL, SC - TÉCNICOS EM CIBERSISTEMAS PARA AUTOMAÇÃO - 2026/1 |
+#---------------------------------------------------------------------------------
 
+# --- BACK-END FLASK: ROTAS DA API REST ---
+# --- IMPORTES ---
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from database import init_bd, get_connection
+import datetime 
 
 # Cria uma instância da aplicação Flash
 app = Flask(__name__, static_folder = 'static', static_url_path='')
@@ -21,10 +27,19 @@ def index():
 def status():
     # Rota de verificação da API(saúde)
     # Retora um JSON informando que o servidor está vivo
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        'SELECT COUNT(*) as total FROM ordens'
+    )
+    resultado = cursor.fetchone()
+    conn.close()
     return jsonify({
         "status": "online",
         "sistema": "Sistema de ordem de Producao",
-        "versao": "1.0.0",
+        "versao": "2.0.0",
+        "total_ordens": resultado["total"], # Mostra o total das ordens 
+        "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), # Define ano, mês, dia, hora, segundo e minuto 
         "mensagem": "Ola, Fabrica, API FUNCIONANDO!"
     })
 # ROTA Nº3 - LISTAR TODAS AS ORDENS(GET)
@@ -45,10 +60,8 @@ def listar_ordens():
     # Converte cada Row do SQLite em um dicionário Python para serializar um JSON
     return jsonify([dict(o) for o in ordens])
 
-# --- ROTA POR ID - BUSCAR UMA ORDEM ESPECÍFICA PELO ID (GET) ---
-
+# ROTA: Buscar ordem específica por ID (GET) 
 @app.route('/ordens/<int:ordem_id>', methods=['GET'])
-
 def buscar_ordem(ordem_id):
     """
     |Buscar uma única ordem de produção pelo ID.
@@ -63,9 +76,9 @@ def buscar_ordem(ordem_id):
     conn = get_connection()
     cursor = conn.cursor()
     
-    # O'?' é substituido pelo valor de ordem_id de forma segura
+    # O '?' é substituido pelo valor de ordem_id de forma segura
     cursor.execute('SELECT * FROM ordens WHERE id = ?', (ordem_id,))
-    ordem = cursor.fetchone()  #ele retorna um unico registro ou None
+    ordem = cursor.fetchone()  # Ele retorna um unico registro ou None
     conn.close()
     
     
@@ -143,7 +156,7 @@ def criar_ordem():
     # 201 - Retornar "created" com registro completo
     return jsonify(dict(nova_ordem)), 201
 
-   # ROTA: Atualizar os status de uma ordem de produção (PUT)
+# ROTA: Atualizar os status de uma ordem de produção (PUT)
 @app.route('/ordens/<int:ordem_id>', methods=['PUT'])
 def atualizar_ordem(ordem_id):
     '''     
