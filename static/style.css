@@ -1,0 +1,245 @@
+/* — Import da fonte (caso use CSS separado) — */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* — Reset e base ————————————————————————————————————————————————— */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+font-family: 'Poppins', Arial, sans-serif;
+background: #f4f8fc;
+color: #1f2d3a;
+min-height: 100vh;
+}
+
+/* — Cabecalho ———————————————————————————————————————————————————— */
+header {
+background: linear-gradient(135deg, #4a6fdc, #a9c1ff);
+color: white;
+padding: 1.2rem 2rem;
+box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+}
+
+.header-content {
+max-width: 1100px;
+margin: 0 auto;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+header h1 {
+font-size: 1.4rem;
+font-weight: 700;
+}
+
+/* — Badge de status ——————————————————————————————————————— */
+#status-badge {
+font-size: 0.8rem;
+padding: 4px 12px;
+border-radius: 20px;
+background: rgba(255,255,255,0.3);
+border: 1px solid rgba(255,255,255,0.5);
+}
+
+#status-badge.online { background:#7ea6ff; border-color:#7ea6ff; }
+#status-badge.offline { background:#cfd8dc; border-color:#cfd8dc; }
+
+/* — Layout principal ————————————————————————————————————————— */
+main {
+max-width: 1100px;
+margin: 2rem auto;
+padding: 0 1rem;
+display: flex;
+flex-direction: column;
+gap: 1.5rem;
+}
+
+/* — Cards ——————————————————————————————————————————————————— */
+.card {
+background: white;
+border-radius: 12px;
+padding: 1.5rem;
+box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+}
+
+.card h2 {
+font-size: 1.1rem;
+color: #4a6fdc;
+margin-bottom: 1rem;
+padding-bottom: 0.5rem;
+border-bottom: 2px solid #e3ecff;
+font-weight: 600;
+}
+
+/* — Formulario ——————————————————————————————————————————— */
+.form-grid {
+display: grid;
+grid-template-columns: 2fr 1fr 1fr;
+gap: 1rem;
+margin-bottom: 1rem;
+}
+
+@media (max-width: 700px) {
+.form-grid { grid-template-columns: 1fr; }
+}
+
+.form-group {
+display: flex;
+flex-direction: column;
+gap: 4px;
+}
+
+label {
+font-size: 0.85rem;
+font-weight: 500;
+color: #5c6f82;
+}
+
+input, select {
+padding: 0.55rem 0.8rem;
+border: 1.5px solid #d6e0f5;
+border-radius: 6px;
+font-size: 0.95rem;
+transition: all 0.2s;
+outline: none;
+background: #f9fbff;
+font-family: 'Poppins', Arial, sans-serif;
+}
+
+input:focus, select:focus {
+border-color: #7ea6ff;
+background: #ffffff;
+}
+
+/* — Botoes ————————————————————————————————————————————— */
+button {
+padding: 0.6rem 1.4rem;
+border: none;
+border-radius: 6px;
+font-size: 0.95rem;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.2s;
+font-family: 'Poppins', Arial, sans-serif;
+}
+
+button:hover { opacity: 0.9; }
+button:active { transform: scale(0.97); }
+
+#btn-cadastrar {
+background: #5c84ff;
+color: white;
+box-shadow: 0 2px 6px rgba(92,132,255,0.3);
+}
+
+.btn-atualizar {
+background: #e8f0ff;
+color: #5c84ff;
+font-size: 0.85rem;
+}
+
+.btn-excluir {
+background: #ffecef;
+color: #5c84ff;
+font-size: 0.8rem;
+padding: 4px 10px;
+}
+
+.btn-editar {
+    background: #effdff;
+    color: #5c84ff;
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    }
+    
+
+/* — Mensagem ——————————————————————————————————————————— */
+.mensagem {
+margin-top: 0.8rem;
+padding: 0.6rem 1rem;
+border-radius: 6px;
+font-size: 0.9rem;
+font-weight: 500;
+}
+
+.mensagem.sucesso {
+background:#eaf4ff;
+color:#5c84ff;
+border-left:4px solid #5c84ff;
+}
+
+.mensagem.erro {
+background:#ffecef;
+color:#5c84ff;
+border-left:4px solid #5c84ff;
+}
+
+.oculto { display: none; }
+
+/* — Tabela ————————————————————————————————————————————— */
+.listagem-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 1rem;
+}
+
+.tabela-container { overflow-x: auto; }
+
+table {
+width: 100%;
+border-collapse: collapse;
+font-size: 0.9rem;
+}
+
+th {
+background: #5c84ff;
+color: white;
+padding: 10px 12px;
+text-align: left;
+font-weight: 600;
+}
+
+td {
+padding: 10px 12px;
+border-bottom: 1px solid #edf2fa;
+}
+
+tr:hover td { background: #f5f8ff; }
+
+/* — Badges ————————————————————————————————————————————— */
+.badge {
+display: inline-block;
+padding: 3px 10px;
+border-radius: 12px;
+font-size: 0.78rem;
+font-weight: 600;
+}
+
+.badge-pendente { background:#fcdcdc; color:#5c84ff; }
+.badge-andamento { background:#e3efff; color:#5c84ff; }
+.badge-concluida { background:#def8e7; color:#5c84ff; }
+
+/* — Select tabela —————————————————————————————————————— */
+.select-status {
+padding: 3px 6px;
+border: 1px solid #d6e0f5;
+border-radius: 4px;
+font-size: 0.82rem;
+cursor: pointer;
+}
+
+/* — Loading ——————————————————————————————————————————— */
+#loading {
+text-align: center;
+padding: 1rem;
+color: #5c84ff;
+font-weight: 600;
+}
+
+#sem-dados {
+text-align:center;
+padding:2rem;
+color:#94a3b8;
+}
